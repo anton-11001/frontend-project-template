@@ -1,6 +1,6 @@
-# frontend-project-template
-Universal Frontend Project Template
+# Project Structure Blueprint
 
+```text
 src/
 ├── api/                         # Global API infrastructure
 │   ├── instance.ts              # Axios configuration (base URL, 401/refresh interceptors)
@@ -57,3 +57,101 @@ src/
 │
 ├── main.tsx                     # Application entry point
 └── App.tsx                      # Root component (Provider tree: QueryClient, Auth, Router)
+
+```
+
+---
+
+## src/
+
+### api/
+
+Global infrastructure for network requests and server state.
+
+* **instance.ts**: Axios configuration including base URL and interceptors for 401 Unauthorized handling and silent token refresh logic.
+* **endpoints.ts**: Centralized ENDPOINTS object serving as the single source of truth for all API URLs.
+* **query-keys.ts**: Static constants for TanStack Query cache keys to ensure consistent data invalidation.
+* **types.ts**: Shared API-specific TypeScript definitions such as GenericResponse and PaginationParams.
+
+### router/
+
+Application navigation and routing logic.
+
+* **paths.ts**: Route path constants used throughout the app (e.g., PATHS.auth.login).
+* **index.tsx**: Main RouterProvider setup and route tree definitions.
+* **components/**: Route guards including ProtectedRoute for authenticated sessions and PublicRoute for guest access, plus Layout wrappers.
+
+### features/
+
+Business logic organized into horizontal modules. Each subdirectory represents a self-contained domain.
+
+* **[feature-name]/** (e.g., auth, letters, billing)
+* **api/**: Network logic specific to this feature.
+* **hooks/**: Dedicated TanStack Query hooks (e.g., useLogin, useGetLetter).
+* **types.ts**: DTO (Data Transfer Object) definitions for feature-specific requests and responses.
+
+
+* **components/**: Private components used exclusively within this specific feature.
+* **pages/**: Feature-level screens and page components.
+* **store/**: Feature-specific state management (Zustand or Redux slices).
+* **validation/**: Zod schemas or validation rules for feature forms.
+* **index.ts**: Public API for the feature; exports only the components and hooks intended for external use.
+
+
+
+### components/
+
+Shared UI-KIT components.
+
+* **ui/**: Atomic, stateless components such as Button, Input, Modal, and Badge.
+* **common/**: Complex shared components used across features, such as AppHeader or Sidebar.
+* **index.ts**: Central export file for the shared component library.
+
+### contexts/
+
+Global React Context providers.
+
+* **auth-context.tsx**: Global session management containing user data and authentication status.
+* **theme-context.tsx**: Global UI state for theme management (light/dark mode).
+
+### hooks/
+
+Global, reusable custom React hooks.
+
+* **use-debounce.ts**
+* **use-local-storage.ts**
+* **use-media-query.ts**
+
+### utils/
+
+Pure helper functions and utilities.
+
+* **date.ts**: Logic for date manipulation and formatting.
+* **mask.ts**: Input masking utilities for IPs, phone numbers, or sensitive data.
+* **storage.ts**: Type-safe wrappers for browser storage interaction.
+
+### locales/
+
+Internationalization and translation assets.
+
+* **en/**: English translation files.
+* **ua/**: Ukrainian translation files.
+
+### theme/
+
+Global styling configuration and design system tokens.
+
+* **colors.ts**
+* **breakpoints.ts**
+* **index.ts**: Integration for Tailwind configuration or CSS-in-JS theme providers.
+
+### types/
+
+Global TypeScript declarations for domain models.
+
+* **entity.ts**: Pure domain interfaces (e.g., User, Letter, Session) representing the business logic, independent of API structures.
+
+### Entry Files
+
+* **main.tsx**: Application entry point for the build tool.
+* **App.tsx**: Root component containing the Provider tree (QueryClientProvider, AuthProvider, RouterProvider).
