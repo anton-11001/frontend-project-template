@@ -80,6 +80,15 @@ Global TypeScript declarations for domain models.
 
 For things like APP_TITLE, SUPPORT_EMAIL, or global pagination defaults that aren't specific to a feature.
 
+### errors/
+
+Centralized application error handling.
+
+- **api-error.ts**: API error normalization.
+- **error-codes.ts**: Shared application error codes.
+- **handlers/**: Global error handling utilities.
+- **boundaries/**: React Error Boundaries.
+
 ### Entry Files
 
 - **main.tsx**: Application entry point for the build tool.
@@ -108,3 +117,50 @@ Dedicated space for ensuring your application behaves as expected.
 ### store/
 
 Used for Zustand or Redux to handle complex client-side state (like a multi-step form or a persistent sidebar state).
+
+### permissions/
+
+Authorization and role-based access control logic.
+
+- **roles.ts**: System roles and permission maps.
+- **guards/**: Permission validation helpers.
+- **hooks/**: Hooks like usePermissions or useRoleAccess.
+
+### config/
+
+Application-wide static configuration.
+
+- **app.ts**: General app configuration.
+- **feature-flags.ts**: Runtime feature toggles.
+- **navigation.ts**: Sidebar or menu configuration.
+- **client.ts**: Safe client-side environment variables.
+- **server.ts**: Server-only environment variables if applicable.
+
+## Conventions
+
+- Prefer feature-first architecture.
+- Avoid cross-feature imports when possible.
+- Shared logic must live in shared layers only.
+- Components should remain presentation-focused.
+- TanStack Query handles server state.
+- Zustand/Redux handles client state only.
+- Avoid direct API calls inside components.
+- Prefer composition over inheritance.
+- Prefer explicit exports through feature `index.ts`.
+- Keep business logic outside JSX.
+
+## Import Rules
+
+Dependency direction should remain predictable.
+
+Allowed flow:
+
+```txt
+app → pages → features → shared
+```
+
+Disallowed:
+
+- features importing from other unrelated features
+- shared importing from features
+- components directly calling APIs
